@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>语法生成器</title>
+</head>
+<body>
+    <h1>语法生成器</h1>
+    <form>
+        <label for="inputText">输入文本：</label>
+        <input type="text" id="inputText" name="inputText">
+        <button type="button" onclick="generateGoogleSyntax()">谷歌语法生成</button>
+        <button type="button" onclick="generateGithubSyntax()">GitHub语法生成</button>
+    </form>
+    
+    <div id="googleSyntaxTable" style="display: none;">
+        <h2>谷歌语法生成结果</h2>
+        <table id="googleTable">
+            <tr>
+                <th>谷歌</th>
+                <th>百度</th>
+                <th>搜狗</th>
+                <th>必应</th>
+            </tr>
+        </table>
+    </div>
+	<div id="output"></div>
+    <script>
+        function generateGoogleSyntax() {
+    const inputText = document.getElementById('inputText').value;
+    const keywords = [
+        "敏感信息搜索",
+        "登陆后台",
+        "上传文件接口",
+        "SQLI 常见参数",
+        "RCE 常见参数",
+        "SSRF 常见参数",
+        "本地文件包含",
+        "常见的敏感文件扩展",
+        "API Docs",
+        "XSS",
+        "目录遍历",
+        "Robots文件泄露",
+        "token in url",
+		"文件信息"
+    ];
+
+    const table = document.getElementById('googleTable');
+    table.innerHTML = '<tr><th></th><th>谷歌</th><th>百度</th><th>搜狗</th><th>必应</th><th></tr>';
+
+    for (let i = 0; i < keywords.length; i++) {
+        const row = table.insertRow(-1);
+        const cell1 = row.insertCell(0);
+        cell1.innerHTML = keywords[i];
+        for (let j = 1; j < 5; j++) {
+            const cell = row.insertCell(j);
+            cell.contentEditable = true;
+        }
+    }
+	
+	// 测试创建一个a标签
+	const aTag = document.createElement('a');
+	aTag.href = inputText; // 设置a标签的链接地址为输入文本
+	aTag.textContent = inputText; // 设置a标签的文本内容为输入文本
+	
+	
+	//搜索引擎 百度
+	var baidu_base_url = 'http://baidu.com/s?wd=';
+	
+	var baidu_message_text = 'site:'+inputText+' ( "默认密码" OR "学号" OR "工号" OR "身份证" OR "账号")';
+	//创建敏感信息登录标签 
+	//site:example.com  ( "默认密码" OR "学号" OR "工号" OR "身份证" OR "账号")
+	const baidu_message = document.createElement('a');
+	baidu_message.href = baidu_base_url+baidu_message_text; // 设置a标签的链接地址为输入文本
+	baidu_message.textContent = baidu_message_text; // 设置a标签的文本内容为输入文本
+	// 百度搜索引擎将a标签添加到第二行第列的单元格中
+	const secondRow = table.rows[1];
+	const thirdCell = secondRow.cells[2];
+	thirdCell.appendChild(baidu_message);
+	
+	
+	var baidu_login_text = 'site:'+inputText+' 后台 登录 管理 login';
+	//创建登录后台
+	const baidu_login = document.createElement('a');
+	baidu_login.href = baidu_base_url+baidu_login_text; // 设置a标签的链接地址为输入文本
+	baidu_login.textContent = baidu_login_text; // 设置a标签的文本内容为输入文本
+	// 百度搜索引擎将a标签添加到第二行第三列的单元格中
+	const baidu_loginRow = table.rows[2];
+	const baidu_loginCell = baidu_loginRow.cells[2];
+	baidu_loginCell.appendChild(baidu_login);
+	
+	//创建上传
+	var baidu_Upload_text = 'site:'+inputText+' ("choose file" OR "选择文件")';
+	const baidu_Upload = document.createElement('a');
+	baidu_Upload.href = baidu_base_url+baidu_Upload_text; // 设置a标签的链接地址为输入文本
+	baidu_Upload.textContent = baidu_Upload_text; // 设置a标签的文本内容为输入文本
+	// 百度搜索引擎将a标签添加到第二行第三列的单元格中
+	const baidu_uploadRow = table.rows[3];
+	const baidu_uploadCell = baidu_uploadRow.cells[2];
+	baidu_uploadCell.appendChild(baidu_Upload);
+	
+	//创建sqli常见参数
+	var baidu_sqli_text = 'inurl:id= | inurl:pid= | inurl:category= | inurl:cat= | inurl:action= | inurl:sid= | inurl:dir= inurl:& '+'site:'+inputText;
+	const baidu_sqli = document.createElement('a');
+	baidu_sqli.href = baidu_base_url+baidu_sqli_text; // 设置a标签的链接地址为输入文本
+	baidu_sqli.textContent = baidu_sqli_text; // 设置a标签的文本内容为输入文本
+	// 百度搜索引擎将a标签添加到第二行第三列的单元格中
+	const baidu_sqliRow = table.rows[4];
+	const baidu_sqliCell = baidu_sqliRow.cells[2];
+	baidu_sqliCell.appendChild(baidu_sqli);
+	
+	//创建RCE常见参数
+	var baidu_rce_text = 'inurl:cmd | inurl:exec= | inurl:query= | inurl:code= | inurl:do= | inurl:run= | inurl:read= | inurl:ping= inurl:& '+'site:'+inputText;
+	const baidu_rce = document.createElement('a');
+	baidu_rce.href = baidu_base_url+baidu_rce_text; // 设置a标签的链接地址为输入文本
+	baidu_rce.textContent = baidu_rce_text; // 设置a标签的文本内容为输入文本
+	// 百度搜索引擎将a标签添加到第二行第三列的单元格中
+	const baidu_rceRow = table.rows[5];
+	const baidu_rceCell = baidu_rceRow.cells[2];
+	baidu_rceCell.appendChild(baidu_rce);
+	
+	//创建ssrf常见参数
+	var baidu_ssrf_text = 'inurl:http | inurl:url= | inurl:path= | inurl:dest= | inurl:html= | inurl:data= | inurl:domain= | inurl:page= inurl:& '+'site:'+inputText;
+	const baidu_ssrf = document.createElement('a');
+	baidu_ssrf.href = baidu_base_url+baidu_ssrf_text; // 设置a标签的链接地址为输入文本
+	baidu_ssrf.textContent = baidu_ssrf_text; // 设置a标签的文本内容为输入文本
+	// 百度搜索引擎将a标签添加到第二行第三列的单元格中
+	const baidu_ssrfRow = table.rows[6];
+	const baidu_ssrfCell = baidu_ssrfRow.cells[2];
+	baidu_ssrfCell.appendChild(baidu_ssrf);
+	
+	//创建LFI常见参数
+	var baidu_LFI_text = 'inurl:include | inurl:dir | inurl:detail= | inurl:file= | inurl:folder= | inurl:inc= | inurl:locate= | inurl:doc= | inurl:conf= inurl:& '+'site:'+inputText;
+	const baidu_LFI = document.createElement('a');
+	baidu_LFI.href = baidu_base_url+baidu_LFI_text; // 设置a标签的链接地址为输入文本
+	baidu_LFI.textContent = baidu_LFI_text; // 设置a标签的文本内容为输入文本
+	// 百度搜索引擎将a标签添加到第二行第三列的单元格中
+	const baidu_LFIRow = table.rows[7];
+	const baidu_LFICell = baidu_LFIRow.cells[2];
+	baidu_LFICell.appendChild(baidu_LFI);
+	
+	//创建SensitiveFile常见参数
+	var baidu_SensitiveFile_text = 'site:'+inputText+' ext:log | ext:txt | ext:conf | ext:cnf | ext:ini | ext:env | ext:sh | ext:bak | ext:backup | ext:swp | ext:old | ext:~ | ext:git | ext:svn | ext:htpasswd | ext:htaccess';
+	const baidu_SensitiveFile = document.createElement('a');
+	baidu_SensitiveFile.href = baidu_base_url+baidu_SensitiveFile_text; // 设置a标签的链接地址为输入文本
+	baidu_SensitiveFile.textContent = baidu_SensitiveFile_text; // 设置a标签的文本内容为输入文本
+	// 百度搜索引擎将a标签添加到第二行第三列的单元格中
+	const baidu_SensitiveFileRow = table.rows[8];
+	const baidu_SensitiveFileCell = baidu_SensitiveFileRow.cells[2];
+	baidu_SensitiveFileCell.appendChild(baidu_SensitiveFile);
+	
+	//创建APIFile常见参数
+	var baidu_APIFile_text = 'inurl:apidocs | inurl:api-docs | inurl:swagger | inurl:api-explorer '+'site:'+inputText;
+	const baidu_APIFile = document.createElement('a');
+	baidu_APIFile.href = baidu_base_url+baidu_APIFile_text; // 设置a标签的链接地址为输入文本
+	baidu_APIFile.textContent = baidu_APIFile_text; // 设置a标签的文本内容为输入文本
+	// 百度搜索引擎将a标签添加到第二行第三列的单元格中
+	const baidu_APIFileRow = table.rows[9];
+	const baidu_APIFileCell = baidu_APIFileRow.cells[2];
+	baidu_APIFileCell.appendChild(baidu_APIFile);
+	
+	//创建XSS常见参数
+	var baidu_XSS_text = 'inurl:q= | inurl:s= | inurl:search= | inurl:query= inurl:& '+'site:'+inputText;
+	const baidu_XSS = document.createElement('a');
+	baidu_XSS.href = baidu_base_url+baidu_XSS_text; // 设置a标签的链接地址为输入文本
+	baidu_XSS.textContent = baidu_XSS_text; // 设置a标签的文本内容为输入文本
+	// 百度搜索引擎将a标签添加到第二行第三列的单元格中
+	const baidu_XSSRow = table.rows[10];
+	const baidu_XSSCell = baidu_XSSRow.cells[2];
+	baidu_XSSCell.appendChild(baidu_XSS);
+	
+	//创建dir_list常见参数
+	var baidu_dir_list_text = 'intitle:"index of" '+'site:'+inputText;
+	const baidu_dir_list = document.createElement('a');
+	baidu_dir_list.href = baidu_base_url+baidu_dir_list_text; // 设置a标签的链接地址为输入文本
+	baidu_dir_list.textContent = baidu_dir_list_text; // 设置a标签的文本内容为输入文本
+	// 百度搜索引擎将a标签添加到第二行第三列的单元格中
+	const baidu_dir_listRow = table.rows[11];
+	const baidu_dir_listCell = baidu_dir_listRow.cells[2];
+	baidu_dir_listCell.appendChild(baidu_dir_list);
+	
+	//创建robots常见参数
+	var baidu_robots_text = inputText+' '+inputText+'/robots.txt';
+	const baidu_robots = document.createElement('a');
+	baidu_robots.href = baidu_base_url+baidu_robots_text; // 设置a标签的链接地址为输入文本
+	baidu_robots.textContent = baidu_robots_text; // 设置a标签的文本内容为输入文本
+	// 百度搜索引擎将a标签添加到第二行第三列的单元格中
+	const baidu_robotsRow = table.rows[12];
+	const baidu_robotsCell = baidu_robotsRow.cells[2];
+	baidu_robotsCell.appendChild(baidu_robots);
+	
+	//搜索引擎 谷歌
+	var google_base_url = 'https://www.google.com/search?q=';
+	
+	var google_message_text = 'site:'+inputText+' ( "默认密码" OR "学号" OR "工号" OR "身份证" OR "账号")';
+	//创建敏感信息登录标签 
+	//site:example.com  ( "默认密码" OR "学号" OR "工号" OR "身份证" OR "账号")
+	const google_message = document.createElement('a');
+	google_message.href = google_base_url+google_message_text; // 设置a标签的链接地址为输入文本
+	google_message.textContent = google_message_text; // 设置a标签的文本内容为输入文本
+	// 谷歌搜索引擎将a标签添加到第二行第列的单元格中
+	const google_messageRow = table.rows[1];
+	const google_messageCell = google_messageRow.cells[1];
+	google_messageCell.appendChild(google_message);
+	
+	
+	var google_login_text = 'site:'+inputText+' 后台 登录 管理 login';
+	//创建登录后台
+	const google_login = document.createElement('a');
+	google_login.href = google_base_url+google_login_text; // 设置a标签的链接地址为输入文本
+	google_login.textContent = google_login_text; // 设置a标签的文本内容为输入文本
+	// 谷歌搜索引擎将a标签添加到第二行第三列的单元格中
+	const google_loginRow = table.rows[2];
+	const google_loginCell = google_loginRow.cells[1];
+	google_loginCell.appendChild(google_login);
+	
+	//创建上传
+	var google_Upload_text = 'site:'+inputText+' ("choose file" OR "选择文件")';
+	const google_Upload = document.createElement('a');
+	google_Upload.href = google_base_url+google_Upload_text; // 设置a标签的链接地址为输入文本
+	google_Upload.textContent = google_Upload_text; // 设置a标签的文本内容为输入文本
+	// 谷歌搜索引擎将a标签添加到第二行第三列的单元格中
+	const google_uploadRow = table.rows[3];
+	const google_uploadCell = google_uploadRow.cells[1];
+	google_uploadCell.appendChild(google_Upload);
+	
+	//创建sqli常见参数
+	var google_sqli_text = 'inurl:id= | inurl:pid= | inurl:category= | inurl:cat= | inurl:action= | inurl:sid= | inurl:dir= inurl:& '+'site:'+inputText;
+	const google_sqli = document.createElement('a');
+	google_sqli.href = google_base_url+google_sqli_text; // 设置a标签的链接地址为输入文本
+	google_sqli.textContent = google_sqli_text; // 设置a标签的文本内容为输入文本
+	// 谷歌搜索引擎将a标签添加到第二行第三列的单元格中
+	const google_sqliRow = table.rows[4];
+	const google_sqliCell = google_sqliRow.cells[1];
+	google_sqliCell.appendChild(google_sqli);
+	
+	//创建RCE常见参数
+	var google_rce_text = 'inurl:cmd | inurl:exec= | inurl:query= | inurl:code= | inurl:do= | inurl:run= | inurl:read= | inurl:ping= inurl:& '+'site:'+inputText;
+	const google_rce = document.createElement('a');
+	google_rce.href = google_base_url+google_rce_text; // 设置a标签的链接地址为输入文本
+	google_rce.textContent = google_rce_text; // 设置a标签的文本内容为输入文本
+	// 谷歌搜索引擎将a标签添加到第二行第三列的单元格中
+	const google_rceRow = table.rows[5];
+	const google_rceCell = google_rceRow.cells[1];
+	google_rceCell.appendChild(google_rce);
+	
+	//创建ssrf常见参数
+	var google_ssrf_text = 'inurl:http | inurl:url= | inurl:path= | inurl:dest= | inurl:html= | inurl:data= | inurl:domain= | inurl:page= inurl:& '+'site:'+inputText;
+	const google_ssrf = document.createElement('a');
+	google_ssrf.href = google_base_url+google_ssrf_text; // 设置a标签的链接地址为输入文本
+	google_ssrf.textContent = google_ssrf_text; // 设置a标签的文本内容为输入文本
+	// 谷歌搜索引擎将a标签添加到第二行第三列的单元格中
+	const google_ssrfRow = table.rows[6];
+	const google_ssrfCell = google_ssrfRow.cells[1];
+	google_ssrfCell.appendChild(google_ssrf);
+	
+	//创建LFI常见参数
+	var google_LFI_text = 'inurl:include | inurl:dir | inurl:detail= | inurl:file= | inurl:folder= | inurl:inc= | inurl:locate= | inurl:doc= | inurl:conf= inurl:& '+'site:'+inputText;
+	const google_LFI = document.createElement('a');
+	google_LFI.href = google_base_url+google_LFI_text; // 设置a标签的链接地址为输入文本
+	google_LFI.textContent = google_LFI_text; // 设置a标签的文本内容为输入文本
+	// 谷歌搜索引擎将a标签添加到第二行第三列的单元格中
+	const google_LFIRow = table.rows[7];
+	const google_LFICell = google_LFIRow.cells[1];
+	google_LFICell.appendChild(google_LFI);
+	
+	//创建SensitiveFile常见参数
+	var google_SensitiveFile_text = 'site:'+inputText+' ext:log | ext:txt | ext:conf | ext:cnf | ext:ini | ext:env | ext:sh | ext:bak | ext:backup | ext:swp | ext:old | ext:~ | ext:git | ext:svn | ext:htpasswd | ext:htaccess';
+	const google_SensitiveFile = document.createElement('a');
+	google_SensitiveFile.href = google_base_url+google_SensitiveFile_text; // 设置a标签的链接地址为输入文本
+	google_SensitiveFile.textContent = google_SensitiveFile_text; // 设置a标签的文本内容为输入文本
+	// 谷歌搜索引擎将a标签添加到第二行第三列的单元格中
+	const google_SensitiveFileRow = table.rows[8];
+	const google_SensitiveFileCell = google_SensitiveFileRow.cells[1];
+	google_SensitiveFileCell.appendChild(google_SensitiveFile);
+	
+	//创建APIFile常见参数
+	var google_APIFile_text = 'inurl:apidocs | inurl:api-docs | inurl:swagger | inurl:api-explorer '+'site:'+inputText;
+	const google_APIFile = document.createElement('a');
+	google_APIFile.href = google_base_url+google_APIFile_text; // 设置a标签的链接地址为输入文本
+	google_APIFile.textContent = google_APIFile_text; // 设置a标签的文本内容为输入文本
+	// 谷歌搜索引擎将a标签添加到第二行第三列的单元格中
+	const google_APIFileRow = table.rows[9];
+	const google_APIFileCell = google_APIFileRow.cells[1];
+	google_APIFileCell.appendChild(google_APIFile);
+	
+	//创建XSS常见参数
+	var google_XSS_text = 'inurl:q= | inurl:s= | inurl:search= | inurl:query= inurl:& '+'site:'+inputText;
+	const google_XSS = document.createElement('a');
+	google_XSS.href = google_base_url+google_XSS_text; // 设置a标签的链接地址为输入文本
+	google_XSS.textContent = google_XSS_text; // 设置a标签的文本内容为输入文本
+	// 谷歌搜索引擎将a标签添加到第二行第三列的单元格中
+	const google_XSSRow = table.rows[10];
+	const google_XSSCell = google_XSSRow.cells[1];
+	google_XSSCell.appendChild(google_XSS);
+	
+	//创建dir_list常见参数
+	var google_dir_list_text = 'intitle:"index of" '+'site:'+inputText;
+	const google_dir_list = document.createElement('a');
+	google_dir_list.href = google_base_url+google_dir_list_text; // 设置a标签的链接地址为输入文本
+	google_dir_list.textContent = google_dir_list_text; // 设置a标签的文本内容为输入文本
+	// 谷歌搜索引擎将a标签添加到第二行第三列的单元格中
+	const google_dir_listRow = table.rows[11];
+	const google_dir_listCell = google_dir_listRow.cells[1];
+	google_dir_listCell.appendChild(google_dir_list);
+	
+	//创建robots常见参数
+	var google_robots_text = inputText+' '+inputText+'/robots.txt';
+	const google_robots = document.createElement('a');
+	google_robots.href = google_base_url+google_robots_text; // 设置a标签的链接地址为输入文本
+	google_robots.textContent = google_robots_text; // 设置a标签的文本内容为输入文本
+	// 谷歌搜索引擎将a标签添加到第二行第三列的单元格中
+	const google_robotsRow = table.rows[12];
+	const google_robotsCell = google_robotsRow.cells[1];
+	google_robotsCell.appendChild(google_robots);
+	
+	//搜索引擎 搜狗
+	var sougou_base_url = 'https://www.sogou.com/web?query=';
+	
+	var sougou_message_text = 'site:'+inputText+' ( "默认密码" OR "学号" OR "工号" OR "身份证" OR "账号")';
+	//创建敏感信息登录标签 
+	//site:example.com  ( "默认密码" OR "学号" OR "工号" OR "身份证" OR "账号")
+	const sougou_message = document.createElement('a');
+	sougou_message.href = sougou_base_url+sougou_message_text; // 设置a标签的链接地址为输入文本
+	sougou_message.textContent = sougou_message_text; // 设置a标签的文本内容为输入文本
+	// 搜狗搜索引擎将a标签添加到第二行第列的单元格中
+	const sougou_messageRow = table.rows[1];
+	const sougou_messageCell = sougou_messageRow.cells[3];
+	sougou_messageCell.appendChild(sougou_message);
+	
+	
+	var sougou_login_text = 'site:'+inputText+' 后台 登录 管理 login';
+	//创建登录后台
+	const sougou_login = document.createElement('a');
+	sougou_login.href = sougou_base_url+sougou_login_text; // 设置a标签的链接地址为输入文本
+	sougou_login.textContent = sougou_login_text; // 设置a标签的文本内容为输入文本
+	// 搜狗搜索引擎将a标签添加到第二行第三列的单元格中
+	const sougou_loginRow = table.rows[2];
+	const sougou_loginCell = sougou_loginRow.cells[3];
+	sougou_loginCell.appendChild(sougou_login);
+	
+	//创建上传
+	var sougou_Upload_text = 'site:'+inputText+' ("choose file" OR "选择文件")';
+	const sougou_Upload = document.createElement('a');
+	sougou_Upload.href = sougou_base_url+sougou_Upload_text; // 设置a标签的链接地址为输入文本
+	sougou_Upload.textContent = sougou_Upload_text; // 设置a标签的文本内容为输入文本
+	// 搜狗搜索引擎将a标签添加到第二行第三列的单元格中
+	const sougou_uploadRow = table.rows[3];
+	const sougou_uploadCell = sougou_uploadRow.cells[3];
+	sougou_uploadCell.appendChild(sougou_Upload);
+	
+	//创建sqli常见参数
+	var sougou_sqli_text = 'inurl:id= | inurl:pid= | inurl:category= | inurl:cat= | inurl:action= | inurl:sid= | inurl:dir= inurl:& '+'site:'+inputText;
+	const sougou_sqli = document.createElement('a');
+	sougou_sqli.href = sougou_base_url+sougou_sqli_text; // 设置a标签的链接地址为输入文本
+	sougou_sqli.textContent = sougou_sqli_text; // 设置a标签的文本内容为输入文本
+	// 搜狗搜索引擎将a标签添加到第二行第三列的单元格中
+	const sougou_sqliRow = table.rows[4];
+	const sougou_sqliCell = sougou_sqliRow.cells[3];
+	sougou_sqliCell.appendChild(sougou_sqli);
+	
+	//创建RCE常见参数
+	var sougou_rce_text = 'inurl:cmd | inurl:exec= | inurl:query= | inurl:code= | inurl:do= | inurl:run= | inurl:read= | inurl:ping= inurl:& '+'site:'+inputText;
+	const sougou_rce = document.createElement('a');
+	sougou_rce.href = sougou_base_url+sougou_rce_text; // 设置a标签的链接地址为输入文本
+	sougou_rce.textContent = sougou_rce_text; // 设置a标签的文本内容为输入文本
+	// 搜狗搜索引擎将a标签添加到第二行第三列的单元格中
+	const sougou_rceRow = table.rows[5];
+	const sougou_rceCell = sougou_rceRow.cells[3];
+	sougou_rceCell.appendChild(sougou_rce);
+	
+	//创建ssrf常见参数
+	var sougou_ssrf_text = 'inurl:http | inurl:url= | inurl:path= | inurl:dest= | inurl:html= | inurl:data= | inurl:domain= | inurl:page= inurl:& '+'site:'+inputText;
+	const sougou_ssrf = document.createElement('a');
+	sougou_ssrf.href = sougou_base_url+sougou_ssrf_text; // 设置a标签的链接地址为输入文本
+	sougou_ssrf.textContent = sougou_ssrf_text; // 设置a标签的文本内容为输入文本
+	// 搜狗搜索引擎将a标签添加到第二行第三列的单元格中
+	const sougou_ssrfRow = table.rows[6];
+	const sougou_ssrfCell = sougou_ssrfRow.cells[3];
+	sougou_ssrfCell.appendChild(sougou_ssrf);
+	
+	//创建LFI常见参数
+	var sougou_LFI_text = 'inurl:include | inurl:dir | inurl:detail= | inurl:file= | inurl:folder= | inurl:inc= | inurl:locate= | inurl:doc= | inurl:conf= inurl:& '+'site:'+inputText;
+	const sougou_LFI = document.createElement('a');
+	sougou_LFI.href = sougou_base_url+sougou_LFI_text; // 设置a标签的链接地址为输入文本
+	sougou_LFI.textContent = sougou_LFI_text; // 设置a标签的文本内容为输入文本
+	// 搜狗搜索引擎将a标签添加到第二行第三列的单元格中
+	const sougou_LFIRow = table.rows[7];
+	const sougou_LFICell = sougou_LFIRow.cells[3];
+	sougou_LFICell.appendChild(sougou_LFI);
+	
+	//创建SensitiveFile常见参数
+	var sougou_SensitiveFile_text = 'site:'+inputText+' ext:log | ext:txt | ext:conf | ext:cnf | ext:ini | ext:env | ext:sh | ext:bak | ext:backup | ext:swp | ext:old | ext:~ | ext:git | ext:svn | ext:htpasswd | ext:htaccess';
+	const sougou_SensitiveFile = document.createElement('a');
+	sougou_SensitiveFile.href = sougou_base_url+sougou_SensitiveFile_text; // 设置a标签的链接地址为输入文本
+	sougou_SensitiveFile.textContent = sougou_SensitiveFile_text; // 设置a标签的文本内容为输入文本
+	// 搜狗搜索引擎将a标签添加到第二行第三列的单元格中
+	const sougou_SensitiveFileRow = table.rows[8];
+	const sougou_SensitiveFileCell = sougou_SensitiveFileRow.cells[3];
+	sougou_SensitiveFileCell.appendChild(sougou_SensitiveFile);
+	
+	//创建APIFile常见参数
+	var sougou_APIFile_text = 'inurl:apidocs | inurl:api-docs | inurl:swagger | inurl:api-explorer '+'site:'+inputText;
+	const sougou_APIFile = document.createElement('a');
+	sougou_APIFile.href = sougou_base_url+sougou_APIFile_text; // 设置a标签的链接地址为输入文本
+	sougou_APIFile.textContent = sougou_APIFile_text; // 设置a标签的文本内容为输入文本
+	// 搜狗搜索引擎将a标签添加到第二行第三列的单元格中
+	const sougou_APIFileRow = table.rows[9];
+	const sougou_APIFileCell = sougou_APIFileRow.cells[3];
+	sougou_APIFileCell.appendChild(sougou_APIFile);
+	
+	//创建XSS常见参数
+	var sougou_XSS_text = 'inurl:q= | inurl:s= | inurl:search= | inurl:query= inurl:& '+'site:'+inputText;
+	const sougou_XSS = document.createElement('a');
+	sougou_XSS.href = sougou_base_url+sougou_XSS_text; // 设置a标签的链接地址为输入文本
+	sougou_XSS.textContent = sougou_XSS_text; // 设置a标签的文本内容为输入文本
+	// 搜狗搜索引擎将a标签添加到第二行第三列的单元格中
+	const sougou_XSSRow = table.rows[10];
+	const sougou_XSSCell = sougou_XSSRow.cells[3];
+	sougou_XSSCell.appendChild(sougou_XSS);
+	
+	//创建dir_list常见参数
+	var sougou_dir_list_text = 'intitle:"index of" '+'site:'+inputText;
+	const sougou_dir_list = document.createElement('a');
+	sougou_dir_list.href = sougou_base_url+sougou_dir_list_text; // 设置a标签的链接地址为输入文本
+	sougou_dir_list.textContent = sougou_dir_list_text; // 设置a标签的文本内容为输入文本
+	// 搜狗搜索引擎将a标签添加到第二行第三列的单元格中
+	const sougou_dir_listRow = table.rows[11];
+	const sougou_dir_listCell = sougou_dir_listRow.cells[3];
+	sougou_dir_listCell.appendChild(sougou_dir_list);
+	
+	//创建robots常见参数
+	var sougou_robots_text = inputText+' '+inputText+'/robots.txt';
+	const sougou_robots = document.createElement('a');
+	sougou_robots.href = sougou_base_url+sougou_robots_text; // 设置a标签的链接地址为输入文本
+	sougou_robots.textContent = sougou_robots_text; // 设置a标签的文本内容为输入文本
+	// 搜狗搜索引擎将a标签添加到第二行第三列的单元格中
+	const sougou_robotsRow = table.rows[12];
+	const sougou_robotsCell = sougou_robotsRow.cells[3];
+	sougou_robotsCell.appendChild(sougou_robots);
+	
+	//搜索引擎 必应
+	var bing_base_url = 'https://cn.bing.com/search?q=';
+	
+	var bing_message_text = 'site:'+inputText+' ( "默认密码" OR "学号" OR "工号" OR "身份证" OR "账号")';
+	//创建敏感信息登录标签 
+	//site:example.com  ( "默认密码" OR "学号" OR "工号" OR "身份证" OR "账号")
+	const bing_message = document.createElement('a');
+	bing_message.href = bing_base_url+bing_message_text; // 设置a标签的链接地址为输入文本
+	bing_message.textContent = bing_message_text; // 设置a标签的文本内容为输入文本
+	// 必应搜索引擎将a标签添加到第二行第列的单元格中
+	const bing_messageRow = table.rows[1];
+	const bing_messageCell = bing_messageRow.cells[4];
+	bing_messageCell.appendChild(bing_message);
+	
+	
+	var bing_login_text = 'site:'+inputText+' 后台 登录 管理 login';
+	//创建登录后台
+	const bing_login = document.createElement('a');
+	bing_login.href = bing_base_url+bing_login_text; // 设置a标签的链接地址为输入文本
+	bing_login.textContent = bing_login_text; // 设置a标签的文本内容为输入文本
+	// 必应搜索引擎将a标签添加到第二行第三列的单元格中
+	const bing_loginRow = table.rows[2];
+	const bing_loginCell = bing_loginRow.cells[4];
+	bing_loginCell.appendChild(bing_login);
+	
+	//创建上传
+	var bing_Upload_text = 'site:'+inputText+' ("choose file" OR "选择文件")';
+	const bing_Upload = document.createElement('a');
+	bing_Upload.href = bing_base_url+bing_Upload_text; // 设置a标签的链接地址为输入文本
+	bing_Upload.textContent = bing_Upload_text; // 设置a标签的文本内容为输入文本
+	// 必应搜索引擎将a标签添加到第二行第三列的单元格中
+	const bing_uploadRow = table.rows[3];
+	const bing_uploadCell = bing_uploadRow.cells[4];
+	bing_uploadCell.appendChild(bing_Upload);
+	
+	//创建sqli常见参数
+	var bing_sqli_text = 'inurl:id= | inurl:pid= | inurl:category= | inurl:cat= | inurl:action= | inurl:sid= | inurl:dir= inurl:& '+'site:'+inputText;
+	const bing_sqli = document.createElement('a');
+	bing_sqli.href = bing_base_url+bing_sqli_text; // 设置a标签的链接地址为输入文本
+	bing_sqli.textContent = bing_sqli_text; // 设置a标签的文本内容为输入文本
+	// 必应搜索引擎将a标签添加到第二行第三列的单元格中
+	const bing_sqliRow = table.rows[4];
+	const bing_sqliCell = bing_sqliRow.cells[4];
+	bing_sqliCell.appendChild(bing_sqli);
+	
+	//创建RCE常见参数
+	var bing_rce_text = 'inurl:cmd | inurl:exec= | inurl:query= | inurl:code= | inurl:do= | inurl:run= | inurl:read= | inurl:ping= inurl:& '+'site:'+inputText;
+	const bing_rce = document.createElement('a');
+	bing_rce.href = bing_base_url+bing_rce_text; // 设置a标签的链接地址为输入文本
+	bing_rce.textContent = bing_rce_text; // 设置a标签的文本内容为输入文本
+	// 必应搜索引擎将a标签添加到第二行第三列的单元格中
+	const bing_rceRow = table.rows[5];
+	const bing_rceCell = bing_rceRow.cells[4];
+	bing_rceCell.appendChild(bing_rce);
+	
+	//创建ssrf常见参数
+	var bing_ssrf_text = 'inurl:http | inurl:url= | inurl:path= | inurl:dest= | inurl:html= | inurl:data= | inurl:domain= | inurl:page= inurl:& '+'site:'+inputText;
+	const bing_ssrf = document.createElement('a');
+	bing_ssrf.href = bing_base_url+bing_ssrf_text; // 设置a标签的链接地址为输入文本
+	bing_ssrf.textContent = bing_ssrf_text; // 设置a标签的文本内容为输入文本
+	// 必应搜索引擎将a标签添加到第二行第三列的单元格中
+	const bing_ssrfRow = table.rows[6];
+	const bing_ssrfCell = bing_ssrfRow.cells[4];
+	bing_ssrfCell.appendChild(bing_ssrf);
+	
+	//创建LFI常见参数
+	var bing_LFI_text = 'inurl:include | inurl:dir | inurl:detail= | inurl:file= | inurl:folder= | inurl:inc= | inurl:locate= | inurl:doc= | inurl:conf= inurl:& '+'site:'+inputText;
+	const bing_LFI = document.createElement('a');
+	bing_LFI.href = bing_base_url+bing_LFI_text; // 设置a标签的链接地址为输入文本
+	bing_LFI.textContent = bing_LFI_text; // 设置a标签的文本内容为输入文本
+	// 必应搜索引擎将a标签添加到第二行第三列的单元格中
+	const bing_LFIRow = table.rows[7];
+	const bing_LFICell = bing_LFIRow.cells[4];
+	bing_LFICell.appendChild(bing_LFI);
+	
+	//创建SensitiveFile常见参数
+	var bing_SensitiveFile_text = 'site:'+inputText+' ext:log | ext:txt | ext:conf | ext:cnf | ext:ini | ext:env | ext:sh | ext:bak | ext:backup | ext:swp | ext:old | ext:~ | ext:git | ext:svn | ext:htpasswd | ext:htaccess';
+	const bing_SensitiveFile = document.createElement('a');
+	bing_SensitiveFile.href = bing_base_url+bing_SensitiveFile_text; // 设置a标签的链接地址为输入文本
+	bing_SensitiveFile.textContent = bing_SensitiveFile_text; // 设置a标签的文本内容为输入文本
+	// 必应搜索引擎将a标签添加到第二行第三列的单元格中
+	const bing_SensitiveFileRow = table.rows[8];
+	const bing_SensitiveFileCell = bing_SensitiveFileRow.cells[4];
+	bing_SensitiveFileCell.appendChild(bing_SensitiveFile);
+	
+	//创建APIFile常见参数
+	var bing_APIFile_text = 'inurl:apidocs | inurl:api-docs | inurl:swagger | inurl:api-explorer '+'site:'+inputText;
+	const bing_APIFile = document.createElement('a');
+	bing_APIFile.href = bing_base_url+bing_APIFile_text; // 设置a标签的链接地址为输入文本
+	bing_APIFile.textContent = bing_APIFile_text; // 设置a标签的文本内容为输入文本
+	// 必应搜索引擎将a标签添加到第二行第三列的单元格中
+	const bing_APIFileRow = table.rows[9];
+	const bing_APIFileCell = bing_APIFileRow.cells[4];
+	bing_APIFileCell.appendChild(bing_APIFile);
+	
+	//创建XSS常见参数
+	var bing_XSS_text = 'inurl:q= | inurl:s= | inurl:search= | inurl:query= inurl:& '+'site:'+inputText;
+	const bing_XSS = document.createElement('a');
+	bing_XSS.href = bing_base_url+bing_XSS_text; // 设置a标签的链接地址为输入文本
+	bing_XSS.textContent = bing_XSS_text; // 设置a标签的文本内容为输入文本
+	// 必应搜索引擎将a标签添加到第二行第三列的单元格中
+	const bing_XSSRow = table.rows[10];
+	const bing_XSSCell = bing_XSSRow.cells[4];
+	bing_XSSCell.appendChild(bing_XSS);
+	
+	//创建dir_list常见参数
+	var bing_dir_list_text = 'intitle:"index of" '+'site:'+inputText;
+	const bing_dir_list = document.createElement('a');
+	bing_dir_list.href = bing_base_url+bing_dir_list_text; // 设置a标签的链接地址为输入文本
+	bing_dir_list.textContent = bing_dir_list_text; // 设置a标签的文本内容为输入文本
+	// 必应搜索引擎将a标签添加到第二行第三列的单元格中
+	const bing_dir_listRow = table.rows[11];
+	const bing_dir_listCell = bing_dir_listRow.cells[4];
+	bing_dir_listCell.appendChild(bing_dir_list);
+	
+	//创建robots常见参数
+	var bing_robots_text = inputText+' '+inputText+'/robots.txt';
+	const bing_robots = document.createElement('a');
+	bing_robots.href = bing_base_url+bing_robots_text; // 设置a标签的链接地址为输入文本
+	bing_robots.textContent = bing_robots_text; // 设置a标签的文本内容为输入文本
+	// 必应搜索引擎将a标签添加到第二行第三列的单元格中
+	const bing_robotsRow = table.rows[12];
+	const bing_robotsCell = bing_robotsRow.cells[4];
+	bing_robotsCell.appendChild(bing_robots);
+	
+	
+	
+	//创建token常见参数
+	var google_token_text = 'site:'+inputText+' inurl:token';
+	const google_token = document.createElement('a');
+	google_token.href = google_base_url+google_token_text; // 设置a标签的链接地址为输入文本
+	google_token.textContent = google_token_text; // 设置a标签的文本内容为输入文本
+	// 谷歌搜索引擎将a标签添加到第二行第三列的单元格中
+	const google_tokenRow = table.rows[13];
+	const google_tokenCell = google_tokenRow.cells[1];
+	google_tokenCell.appendChild(google_token);
+
+	//创建token常见参数
+	var baidu_token_text = 'site:'+inputText+' inurl:token';
+	const baidu_token = document.createElement('a');
+	baidu_token.href = baidu_base_url+baidu_token_text; // 设置a标签的链接地址为输入文本
+	baidu_token.textContent = baidu_token_text; // 设置a标签的文本内容为输入文本
+	// 百度搜索引擎将a标签添加到第二行第三列的单元格中
+	const baidu_tokenRow = table.rows[13];
+	const baidu_tokenCell = baidu_tokenRow.cells[2];
+	baidu_tokenCell.appendChild(baidu_token);
+	
+	//创建token常见参数
+	var sougou_token_text = 'site:'+inputText+' inurl:token';
+	const sougou_token = document.createElement('a');
+	sougou_token.href = sougou_base_url+sougou_token_text; // 设置a标签的链接地址为输入文本
+	sougou_token.textContent = sougou_token_text; // 设置a标签的文本内容为输入文本
+	// 搜狗搜索引擎将a标签添加到第二行第三列的单元格中
+	const sougou_tokenRow = table.rows[13];
+	const sougou_tokenCell = sougou_tokenRow.cells[3];
+	sougou_tokenCell.appendChild(sougou_token);
+	
+	//创建token常见参数
+	var bing_token_text = 'site:'+inputText+' inurl:token';
+	const bing_token = document.createElement('a');
+	bing_token.href = bing_base_url+bing_token_text; // 设置a标签的链接地址为输入文本
+	bing_token.textContent = bing_token_text; // 设置a标签的文本内容为输入文本
+	// 必应搜索引擎将a标签添加到第二行第三列的单元格中
+	const bing_tokenRow = table.rows[13];
+	const bing_tokenCell = bing_tokenRow.cells[4];
+	bing_tokenCell.appendChild(bing_token);
+	
+	//创建file常见参数
+	var google_file_text = 'site:'+inputText+' ext:log|sql|xls|xml|json|csv|env|yml';
+	const google_file = document.createElement('a');
+	google_file.href = google_base_url+google_file_text; // 设置a标签的链接地址为输入文本
+	google_file.textContent = google_file_text; // 设置a标签的文本内容为输入文本
+	// 谷歌搜索引擎将a标签添加到第二行第三列的单元格中
+	const google_fileRow = table.rows[14];
+	const google_fileCell = google_fileRow.cells[1];
+	google_fileCell.appendChild(google_file);
+
+	//创建file常见参数
+	var baidu_file_text = 'site:'+inputText+' ext:log|sql|xls|xml|json|csv|env|yml';
+	const baidu_file = document.createElement('a');
+	baidu_file.href = baidu_base_url+baidu_file_text; // 设置a标签的链接地址为输入文本
+	baidu_file.textContent = baidu_file_text; // 设置a标签的文本内容为输入文本
+	// 百度搜索引擎将a标签添加到第二行第三列的单元格中
+	const baidu_fileRow = table.rows[14];
+	const baidu_fileCell = baidu_fileRow.cells[2];
+	baidu_fileCell.appendChild(baidu_file);
+	
+	//创建file常见参数
+	var sougou_file_text = 'site:'+inputText+' ext:log|sql|xls|xml|json|csv|env|yml';
+	const sougou_file = document.createElement('a');
+	sougou_file.href = sougou_base_url+sougou_file_text; // 设置a标签的链接地址为输入文本
+	sougou_file.textContent = sougou_file_text; // 设置a标签的文本内容为输入文本
+	// 搜狗搜索引擎将a标签添加到第二行第三列的单元格中
+	const sougou_fileRow = table.rows[14];
+	const sougou_fileCell = sougou_fileRow.cells[3];
+	sougou_fileCell.appendChild(sougou_file);
+	
+	//创建file常见参数
+	var bing_file_text = 'site:'+inputText+' ext:log|sql|xls|xml|json|csv|env|yml';
+	const bing_file = document.createElement('a');
+	bing_file.href = bing_base_url+bing_file_text; // 设置a标签的链接地址为输入文本
+	bing_file.textContent = bing_file_text; // 设置a标签的文本内容为输入文本
+	// 必应搜索引擎将a标签添加到第二行第三列的单元格中
+	const bing_fileRow = table.rows[14];
+	const bing_fileCell = bing_fileRow.cells[4];
+	bing_fileCell.appendChild(bing_file);
+	
+	
+    document.getElementById('googleSyntaxTable').style.display = 'block';
+}
+
+
+        function generateGithubSyntax() {
+            const inputText = document.getElementById('inputText').value;
+            const output = 'GitHub语法生成结果：' + inputText;
+            document.getElementById('output').innerHTML = output;
+        }
+    </script>
+</body>
+</html>
